@@ -14,9 +14,8 @@ public class Alert {
     @Id
     private String timestamp;
 
-    @ManyToOne
-    @JoinColumn(name = DOMAIN_COL)
-    private Domain domain;
+    @Column(name = DOMAIN_COL)
+    private String domain;
 
     @Column(name = IMAGE_BYTES_COL)
     private byte[] imageBytes;
@@ -26,7 +25,7 @@ public class Alert {
 
 
     @JsonCreator
-    public Alert(String timestamp, Domain domain, byte[] imageBytes) {
+    public Alert(String timestamp, String domain, byte[] imageBytes) {
         this.timestamp = timestamp;
         this.domain = domain;
         this.imageBytes = imageBytes;
@@ -43,11 +42,11 @@ public class Alert {
         this.timestamp = timestamp;
     }
 
-    public Domain getDomain() {
+    public String getDomain() {
         return domain;
     }
 
-    public void setDomain(Domain domain) {
+    public void setDomain(String domain) {
         this.domain = domain;
     }
 

@@ -19,9 +19,8 @@ public class User {
     @Id
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = DOMAIN_COL)
-    private Domain domain;
+    @Column(name = DOMAIN_COL)
+    private String domain;
 
 
     @Column(name = FIRSTNAME_COL)
@@ -48,7 +47,7 @@ public class User {
 
 
     @JsonCreator
-    public User(String firstname, String lastname, String email, String ip, Domain domain,
+    public User(String firstname, String lastname, String email, String ip, String domain,
                 String guestCode, String alarmCode, boolean isAdmin) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -96,11 +95,11 @@ public class User {
         this.ip = ip;
     }
 
-    public Domain getDomain() {
+    public String getDomain() {
         return domain;
     }
 
-    public void setDomain(Domain domain) {
+    public void setDomain(String domain) {
         this.domain = domain;
     }
 

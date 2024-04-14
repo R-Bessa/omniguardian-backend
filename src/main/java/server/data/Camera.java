@@ -1,6 +1,5 @@
 package server.data;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.*;
 
@@ -14,17 +13,15 @@ public class Camera {
     @Id
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = DOMAIN_COL)
-    @JsonBackReference
-    private Domain domain;
+    @Column(name = DOMAIN_COL)
+    private String domain;
 
     @Column(name = IS_ON_COL)
     private boolean isOn;
 
 
     @JsonCreator
-    public Camera(String id, Domain domain) {
+    public Camera(String id, String domain) {
         this.id = id;
         isOn = false;
         this.domain = domain;
@@ -48,11 +45,11 @@ public class Camera {
         this.id = id;
     }
 
-    public Domain getDomain() {
+    public String getDomain() {
         return domain;
     }
 
-    public void setDomain(Domain domain) {
+    public void setDomain(String domain) {
         this.domain = domain;
     }
 }
