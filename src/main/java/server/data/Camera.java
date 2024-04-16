@@ -21,9 +21,9 @@ public class Camera {
 
 
     @JsonCreator
-    public Camera(String id, String domain) {
+    public Camera(String id, String domain, boolean isOn) {
         this.id = id;
-        isOn = false;
+        this.isOn = isOn;
         this.domain = domain;
     }
 

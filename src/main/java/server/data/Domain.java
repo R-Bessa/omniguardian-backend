@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.*;
 import server.utils.TokenGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = Domain.TABLE)
 public class Domain {
     public static final String TABLE = "domains";
-    private static final int DEFAULT_ALERTS_CAPACITY = 50;
     private static final String ADDRESS_COL = "address";
     private static final String GUEST_CODE_COL = "guest_code";
     private static final String ALARM_CODE_COL = "alarm_code";
@@ -43,14 +41,16 @@ public class Domain {
     private String authorizationToken;
 
     @JsonCreator
-    public Domain(String domain, List<Camera> cameras, List<User> users, String address, String guestCode, String alarmCode) {
+    public Domain(String domain, List<Camera> cameras, List<User> users, List<Alert> alerts,
+                  String address, String guestCode, String alarmCode, String authorizationToken) {
         this.domain = domain;
         this.cameras = cameras;
         this.users = users;
-        this.alerts = new ArrayList<>(DEFAULT_ALERTS_CAPACITY);
+        this.alerts = alerts;
         this.address = address;
         this.guestCode = guestCode;
         this.alarmCode = alarmCode;
+        this.authorizationToken = authorizationToken;
     }
 
     public Domain() { }

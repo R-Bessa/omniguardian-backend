@@ -11,6 +11,7 @@ public class User {
     private static final String LASTNAME_COL = "lastname";
     private static final String IP_COL = "ip";
     private static final String DOMAIN_COL = "domain";
+    private static final String PASSWORD_COL = "password";
     private static final String GUEST_CODE_COL = "guest_code";
     private static final String ALARM_CODE_COL = "alarm_code";
     private static final String AUTHORIZATION_TOKEN_COL = "authorization_token";
@@ -18,6 +19,9 @@ public class User {
 
     @Id
     private String email;
+
+    @Column(name = PASSWORD_COL)
+    private String password;
 
     @Column(name = DOMAIN_COL)
     private String domain;
@@ -48,7 +52,7 @@ public class User {
 
     @JsonCreator
     public User(String firstname, String lastname, String email, String ip, String domain,
-                String guestCode, String alarmCode, boolean isAdmin) {
+                String guestCode, String alarmCode, boolean isAdmin, String authorizationToken, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -57,6 +61,8 @@ public class User {
         this.guestCode = guestCode;
         this.alarmCode = alarmCode;
         this.isAdmin = isAdmin;
+        this.authorizationToken = authorizationToken;
+        this.password = password;
     }
 
     public User() { }
@@ -133,5 +139,13 @@ public class User {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

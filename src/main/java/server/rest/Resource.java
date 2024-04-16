@@ -4,14 +4,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
-import server.data.Camera;
-import server.data.Domain;
-import server.data.User;
+import server.data.*;
 import server.repositories.AlertRepository;
 import server.repositories.CameraRepository;
 import server.repositories.DomainRepository;
 import server.repositories.UserRepository;
 import server.utils.TokenGenerator;
+
+import java.util.List;
 
 @ApplicationScoped
 @Transactional
@@ -72,4 +72,38 @@ public class Resource implements Service {
     public Response listDomains() {
         return Response.ok(domainRepository.listAll()).build();
     }
+
+    @Override
+    public Response getUser(String email, String password) {
+        User user = userRepository.findById(email);
+        if(!password.equals(user.getPassword()))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        return Response.ok(user).build();
+    }
+
+    @Override
+    public Response getLastAlert(String email, String password) {
+        User user = userRepository.findById(email);
+        if(!password.equals(user.getPassword()))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        Domain domain = domainRepository.findById(user.getDomain());
+        List<Alert> alerts = domain.getAlerts();
+        return Response.ok(alerts.get(alerts.size() - 1)).build();
+    }
+
+    @Override
+    public Response getStorage(String email, String password) {
+        User user = userRepository.findById(email);
+        if(!password.equals(user.getPassword()))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        Domain domain = domainRepository.findById(user.getDomain());
+        List<Alert> alerts = domain.getAlerts();
+        Alert lastAlert = alerts.get(alerts.size() - 1);
+        Storage storage = new Storage(user, lastAlert);
+        return Response.ok(storage).build();
+    }
+
 }

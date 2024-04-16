@@ -25,11 +25,11 @@ public class Alert {
 
 
     @JsonCreator
-    public Alert(String timestamp, String domain, byte[] imageBytes) {
+    public Alert(String timestamp, String domain, byte[] imageBytes, boolean isFalseAlarm) {
         this.timestamp = timestamp;
         this.domain = domain;
         this.imageBytes = imageBytes;
-        this.isFalseAlarm = false;
+        this.isFalseAlarm = isFalseAlarm;
     }
 
     public Alert() { }
