@@ -7,7 +7,6 @@ import server.data.Domain;
 import server.data.User;
 
 
-//TODO Retries
 
 @Path(Service.PATH)
 public interface Service {
@@ -21,6 +20,10 @@ public interface Service {
 
     String EMAIL = "email";
     String PASSWORD = "password";
+
+
+
+    //TODO Retries
 
 
     @Path(ADD_ADMIN_PATH)

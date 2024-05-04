@@ -101,7 +101,10 @@ public class Resource implements Service {
 
         Domain domain = domainRepository.findById(user.getDomain());
         List<Alert> alerts = domain.getAlerts();
-        Alert lastAlert = alerts.get(alerts.size() - 1);
+        Alert lastAlert = null;
+        int nAlerts = alerts.size();
+        if(nAlerts != 0)
+            lastAlert = alerts.get(nAlerts - 1);
         Storage storage = new Storage(user, lastAlert);
         return Response.ok(storage).build();
     }
