@@ -9,13 +9,15 @@ import server.repositories.AlertRepository;
 import server.repositories.CameraRepository;
 import server.repositories.DomainRepository;
 import server.repositories.UserRepository;
+import server.utils.ImageSerializer;
 import server.utils.TokenGenerator;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 @ApplicationScoped
 @Transactional
-public class Resource implements Service {
+public class DatabaseResource implements DatabaseService {
 
     @Inject
     UserRepository userRepository;
@@ -67,6 +69,20 @@ public class Resource implements Service {
         return Response.ok(user).build();
     }
 
+    @Override
+    public Response addAlert(byte[] alert) {
+        /*Camera camera = cameraRepository.findById(alert.getCamera());
+        if(camera == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+        if(!camera.isOn())
+            return Response.status(Response.Status.BAD_REQUEST).build();*/
+
+        BufferedImage buf = ImageSerializer.deserializeImage(alert);
+        ImageSerializer.saveAsPNG(buf, "alert.png");
+        return Response.ok("Record created!").build();
+    }
+
 
     @Override
     public Response listDomains() {
@@ -90,7 +106,11 @@ public class Resource implements Service {
 
         Domain domain = domainRepository.findById(user.getDomain());
         List<Alert> alerts = domain.getAlerts();
-        return Response.ok(alerts.get(alerts.size() - 1)).build();
+        Alert lastAlert = null;
+        int nAlerts = alerts.size();
+        if(nAlerts != 0)
+            lastAlert = alerts.get(nAlerts - 1);
+        return Response.ok(lastAlert).build();
     }
 
     @Override
