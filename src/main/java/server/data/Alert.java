@@ -3,6 +3,8 @@ package server.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.*;
 
+import java.util.Arrays;
+
 @Entity
 @Table(name = Alert.TABLE)
 public class Alert {
@@ -77,5 +79,16 @@ public class Alert {
 
     public void setCamera(String camera) {
         this.camera = camera;
+    }
+
+    @Override
+    public String toString() {
+        return "Alert{" +
+                "timestamp='" + timestamp + '\'' +
+                ", domain='" + domain + '\'' +
+                ", imageBytes=" + Arrays.toString(imageBytes) +
+                ", isFalseAlarm=" + isFalseAlarm +
+                ", camera='" + camera + '\'' +
+                '}';
     }
 }

@@ -71,8 +71,8 @@ public interface DatabaseService {
     @Path(ADD_ALERT_PATH)
     @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
             maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
-    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    Response addAlert(byte[] alert);
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response addAlert(Alert alert);
 
 
     /**

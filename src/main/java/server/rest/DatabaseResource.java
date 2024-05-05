@@ -70,7 +70,7 @@ public class DatabaseResource implements DatabaseService {
     }
 
     @Override
-    public Response addAlert(byte[] alert) {
+    public Response addAlert(Alert alert) {
         /*Camera camera = cameraRepository.findById(alert.getCamera());
         if(camera == null)
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -78,8 +78,10 @@ public class DatabaseResource implements DatabaseService {
         if(!camera.isOn())
             return Response.status(Response.Status.BAD_REQUEST).build();*/
 
-        BufferedImage buf = ImageSerializer.deserializeImage(alert);
-        ImageSerializer.saveAsPNG(buf, "alert.png");
+        BufferedImage buf = ImageSerializer.deserializeImage(alert.getImageBytes());
+        //ImageSerializer.saveAsPNG(buf, "alert.png");
+        //System.out.println(alert.getTimestamp());
+        alertRepository.persist(alert);
         return Response.ok("Record created!").build();
     }
 
