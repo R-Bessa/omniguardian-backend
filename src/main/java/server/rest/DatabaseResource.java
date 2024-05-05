@@ -78,10 +78,10 @@ public class DatabaseResource implements DatabaseService {
         if(!camera.isOn())
             return Response.status(Response.Status.BAD_REQUEST).build();*/
 
-        BufferedImage buf = ImageSerializer.deserializeImage(alert.getImageBytes());
+        //BufferedImage buf = ImageSerializer.deserializeImage(alert.getImageBytes());
         //ImageSerializer.saveAsPNG(buf, "alert.png");
         //System.out.println(alert.getTimestamp());
-        alertRepository.persist(alert);
+        //alertRepository.persist(alert);
         return Response.ok("Record created!").build();
     }
 
