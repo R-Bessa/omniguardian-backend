@@ -13,6 +13,7 @@ import server.utils.ImageSerializer;
 import server.utils.TokenGenerator;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -81,8 +82,18 @@ public class DatabaseResource implements DatabaseService {
         BufferedImage buf = ImageSerializer.deserializeImage(alert.getImageBytes());
         ImageSerializer.saveAsPNG(buf, "alert.png");
         System.out.println(alert.getTimestamp());
-        //alertRepository.persist(alert);
-        return Response.ok("Record created!").build();
+        //System.out.println(alert.toString());
+
+        Domain domain = domainRepository.findById(alert.getDomain());
+        if(domain == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+        alertRepository.persist(alert);
+        List<String> usersIPs =  new ArrayList<>();
+        for(User user: domain.getUsers())
+            usersIPs.add(user.getIp());
+
+        return Response.ok(usersIPs).build();
     }
 
 
