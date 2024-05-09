@@ -21,6 +21,7 @@ public interface DatabaseService {
     String GET_USER_PATH = "/getUser";
     String GET_LAST_ALERT_PATH = "/getLastAlert";
     String GET_STORAGE_PATH = "/getStorage";
+    String GET_DEFAULT_ALERT = "/getDefaultAlert";
     String LIST_DOMAINS_PATH = "/listDomains";
 
     String EMAIL = "email";
@@ -130,4 +131,16 @@ public interface DatabaseService {
             maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getStorage(@PathParam(EMAIL) String email, @QueryParam(PASSWORD) String password);
+
+
+    /**
+     * Get default alert for debug purposes
+     * @return default alert
+     */
+    @GET
+    @Path(GET_DEFAULT_ALERT)
+    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
+            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
+    @Produces(MediaType.APPLICATION_JSON)
+    Response getDefaultAlert();
 }

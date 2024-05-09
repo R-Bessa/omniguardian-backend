@@ -142,4 +142,11 @@ public class DatabaseResource implements DatabaseService {
         return Response.ok(storage).build();
     }
 
+    @Override
+    public Response getDefaultAlert() {
+        Alert defaultAlert = new Alert("default timestamp", "default domain",
+                ImageSerializer.getImageBytes("defaultAlert.png"), false, "camera1");
+        return Response.ok(defaultAlert).build();
+    }
+
 }
