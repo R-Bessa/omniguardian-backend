@@ -72,23 +72,23 @@ public class DatabaseResource implements DatabaseService {
 
     @Override
     public Response addAlert(Alert alert) {
-        /*Camera camera = cameraRepository.findById(alert.getCamera());
+        Camera camera = cameraRepository.findById(alert.getCamera());
         if(camera == null)
             return Response.status(Response.Status.NOT_FOUND).build();
 
         if(!camera.isOn())
-            return Response.status(Response.Status.BAD_REQUEST).build();*/
+            return Response.status(Response.Status.BAD_REQUEST).build();
 
         BufferedImage buf = ImageSerializer.deserializeImage(alert.getImageBytes());
         ImageSerializer.saveAsPNG(buf, "alert.png");
         System.out.println(alert.getTimestamp());
-        //System.out.println(alert.toString());
 
         Domain domain = domainRepository.findById(alert.getDomain());
         if(domain == null)
             return Response.status(Response.Status.NOT_FOUND).build();
 
         alertRepository.persist(alert);
+        System.out.println("PERSISTED");
         List<String> usersIPs =  new ArrayList<>();
         for(User user: domain.getUsers())
             usersIPs.add(user.getIp());
@@ -147,6 +147,38 @@ public class DatabaseResource implements DatabaseService {
         Alert defaultAlert = new Alert("default timestamp", "default domain",
                 ImageSerializer.getImageBytes("defaultAlert.png"), false, "camera1");
         return Response.ok(defaultAlert).build();
+    }
+
+    @Override
+    public Response getAlerts(String email, String token) {
+        User user = userRepository.findById(email);
+        if(!token.equals(user.getAuthorizationToken()))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        Domain domain = domainRepository.findById(user.getDomain());
+        return Response.ok(domain.getAlerts()).build();
+    }
+
+    @Override
+    public Response getPositiveAlerts(String email, String token) {
+        User user = userRepository.findById(email);
+        if(!token.equals(user.getAuthorizationToken()))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        Domain domain = domainRepository.findById(user.getDomain());
+        List<Alert> positiveAlerts = domain.getAlerts().stream().filter(alert -> !alert.isFalseAlarm()).toList();
+        return Response.ok(positiveAlerts).build();
+    }
+
+    @Override
+    public Response getFalseAlerts(String email, String token) {
+        User user = userRepository.findById(email);
+        if(!token.equals(user.getAuthorizationToken()))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        Domain domain = domainRepository.findById(user.getDomain());
+        List<Alert> falseAlerts = domain.getAlerts().stream().filter(Alert::isFalseAlarm).toList();
+        return Response.ok(falseAlerts).build();
     }
 
 }

@@ -23,9 +23,13 @@ public interface DatabaseService {
     String GET_STORAGE_PATH = "/getStorage";
     String GET_DEFAULT_ALERT = "/getDefaultAlert";
     String LIST_DOMAINS_PATH = "/listDomains";
+    String GET_ALERTS_PATH = "/getAlerts";
+    String GET_POSITIVE_ALERTS_PATH = "/getPositiveAlerts";
+    String GET_FALSE_ALERTS_PATH = "/getFalseAlerts";
 
     String EMAIL = "email";
     String PASSWORD = "password";
+    String TOKEN = "token";
 
     int MAX_RETRIES = 4;
     int MIN_DELAY = 500;
@@ -143,4 +147,39 @@ public interface DatabaseService {
             maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getDefaultAlert();
+
+
+    /**
+     * Get all alerts in domain
+     * @return all alerts
+     */
+    @GET
+    @Path(GET_ALERTS_PATH + "/{" + EMAIL + "}")
+    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
+            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
+    @Produces(MediaType.APPLICATION_JSON)
+    Response getAlerts(@PathParam(EMAIL) String email, @QueryParam(TOKEN) String token);
+
+    /**
+     * Get positive alerts in domain
+     * @return positive alerts
+     */
+    @GET
+    @Path(GET_POSITIVE_ALERTS_PATH + "/{" + EMAIL + "}")
+    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
+            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
+    @Produces(MediaType.APPLICATION_JSON)
+    Response getPositiveAlerts(@PathParam(EMAIL) String email, @QueryParam(TOKEN) String token);
+
+
+    /**
+     * Get false alerts in domain
+     * @return false alerts
+     */
+    @GET
+    @Path(GET_FALSE_ALERTS_PATH + "/{" + EMAIL + "}")
+    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
+            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
+    @Produces(MediaType.APPLICATION_JSON)
+    Response getFalseAlerts(@PathParam(EMAIL) String email, @QueryParam(TOKEN) String token);
 }
