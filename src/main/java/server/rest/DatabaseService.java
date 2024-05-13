@@ -1,11 +1,8 @@
 package server.rest;
 
-import io.netty.handler.codec.http2.Http2Exception;
-import io.netty.handler.timeout.TimeoutException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.faulttolerance.Retry;
 import server.data.Alert;
 import server.data.Domain;
 import server.data.User;
@@ -26,14 +23,11 @@ public interface DatabaseService {
     String GET_ALERTS_PATH = "/getAlerts";
     String GET_POSITIVE_ALERTS_PATH = "/getPositiveAlerts";
     String GET_FALSE_ALERTS_PATH = "/getFalseAlerts";
+    String GET_USER_VERIFICATION_PATH = "/getUserVerification";
 
     String EMAIL = "email";
     String PASSWORD = "password";
     String TOKEN = "token";
-
-    int MAX_RETRIES = 4;
-    int MIN_DELAY = 500;
-    int MAX_DELAY = 10000;
 
 
     /**
@@ -44,8 +38,6 @@ public interface DatabaseService {
      */
     @POST
     @Path(ADD_ADMIN_PATH)
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     Response addAdmin(Domain newDomain);
@@ -60,8 +52,6 @@ public interface DatabaseService {
      */
     @POST
     @Path(ADD_GUEST_PATH)
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     Response addGuest(User user);
@@ -74,8 +64,6 @@ public interface DatabaseService {
      */
     @POST
     @Path(ADD_ALERT_PATH)
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Consumes(MediaType.APPLICATION_JSON)
     Response addAlert(Alert alert);
 
@@ -86,8 +74,6 @@ public interface DatabaseService {
      */
     @GET
     @Path(LIST_DOMAINS_PATH)
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response listDomains();
 
@@ -101,8 +87,6 @@ public interface DatabaseService {
      */
     @GET
     @Path(GET_USER_PATH + "/{" + EMAIL + "}")
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getUser(@PathParam(EMAIL) String email, @QueryParam(PASSWORD) String password);
 
@@ -116,8 +100,6 @@ public interface DatabaseService {
      */
     @GET
     @Path(GET_LAST_ALERT_PATH + "/{" + EMAIL + "}")
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getLastAlert(@PathParam(EMAIL) String email, @QueryParam(PASSWORD) String password);
 
@@ -131,8 +113,6 @@ public interface DatabaseService {
      */
     @GET
     @Path(GET_STORAGE_PATH + "/{" + EMAIL + "}")
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getStorage(@PathParam(EMAIL) String email, @QueryParam(PASSWORD) String password);
 
@@ -143,8 +123,6 @@ public interface DatabaseService {
      */
     @GET
     @Path(GET_DEFAULT_ALERT)
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getDefaultAlert();
 
@@ -155,8 +133,6 @@ public interface DatabaseService {
      */
     @GET
     @Path(GET_ALERTS_PATH + "/{" + EMAIL + "}")
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getAlerts(@PathParam(EMAIL) String email, @QueryParam(TOKEN) String token);
 
@@ -166,8 +142,6 @@ public interface DatabaseService {
      */
     @GET
     @Path(GET_POSITIVE_ALERTS_PATH + "/{" + EMAIL + "}")
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getPositiveAlerts(@PathParam(EMAIL) String email, @QueryParam(TOKEN) String token);
 
@@ -178,8 +152,12 @@ public interface DatabaseService {
      */
     @GET
     @Path(GET_FALSE_ALERTS_PATH + "/{" + EMAIL + "}")
-    @Retry(retryOn = TimeoutException.class, abortOn = Http2Exception.class,
-            maxRetries = MAX_RETRIES, delay = MIN_DELAY, maxDuration = MAX_DELAY)
     @Produces(MediaType.APPLICATION_JSON)
     Response getFalseAlerts(@PathParam(EMAIL) String email, @QueryParam(TOKEN) String token);
+
+
+    @GET
+    @Path(GET_USER_VERIFICATION_PATH + "/{" + EMAIL + "}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Response getUserVerification(@PathParam(EMAIL) String email, @QueryParam(PASSWORD) String password);
 }

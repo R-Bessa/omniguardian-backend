@@ -181,4 +181,15 @@ public class DatabaseResource implements DatabaseService {
         return Response.ok(falseAlerts).build();
     }
 
+    @Override
+    public Response getUserVerification(String email, String password) {
+        User user = userRepository.findById(email);
+        if(user == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+        if(!password.equals(user.getPassword()))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        return Response.ok().build();
+    }
+
 }
