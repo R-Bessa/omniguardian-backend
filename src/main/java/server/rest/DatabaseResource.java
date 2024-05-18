@@ -192,4 +192,18 @@ public class DatabaseResource implements DatabaseService {
         return Response.ok().build();
     }
 
+    @Override
+    public Response updateFalseAlarm(String domain) {
+        Domain d = domainRepository.findById(domain);
+        List<Alert> alerts = d.getAlerts();
+        Alert alert = alerts.get(alerts.size() - 1);
+        Alert updatedAlert =
+                new Alert(alert.getTimestamp(), alert.getDomain(), alert.getImageBytes(), true, alert.getCamera());
+
+        alertRepository.delete(alert);
+        alertRepository.persist(updatedAlert);
+        return Response.ok().build();
+    }
+
+
 }

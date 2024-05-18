@@ -24,9 +24,11 @@ public interface DatabaseService {
     String GET_POSITIVE_ALERTS_PATH = "/getPositiveAlerts";
     String GET_FALSE_ALERTS_PATH = "/getFalseAlerts";
     String GET_USER_VERIFICATION_PATH = "/getUserVerification";
+    String UPDATE_FALSE_ALARM_PATH = "/updateFalseAlarm";
 
     String EMAIL = "email";
     String PASSWORD = "password";
+    String DOMAIN = "domain";
     String TOKEN = "token";
 
 
@@ -156,8 +158,19 @@ public interface DatabaseService {
     Response getFalseAlerts(@PathParam(EMAIL) String email, @QueryParam(TOKEN) String token);
 
 
+    /**
+     * Verify user in Google Login
+     * @param email - user email
+     * @param password - user password uid
+     * @return 200 if the user is valid
+     */
     @GET
     @Path(GET_USER_VERIFICATION_PATH + "/{" + EMAIL + "}")
     @Produces(MediaType.APPLICATION_JSON)
     Response getUserVerification(@PathParam(EMAIL) String email, @QueryParam(PASSWORD) String password);
+
+
+    @PUT
+    @Path(UPDATE_FALSE_ALARM_PATH + "/{" + DOMAIN + "}")
+    Response updateFalseAlarm(@PathParam(DOMAIN) String domain);
 }
