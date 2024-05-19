@@ -79,19 +79,23 @@ public class DatabaseResource implements DatabaseService {
         if(!camera.isOn())
             return Response.status(Response.Status.BAD_REQUEST).build();
 
-        BufferedImage buf = ImageSerializer.deserializeImage(alert.getImageBytes());
-        ImageSerializer.saveAsPNG(buf, "alert.png");
-        System.out.println(alert.getTimestamp());
-
         Domain domain = domainRepository.findById(alert.getDomain());
         if(domain == null)
             return Response.status(Response.Status.NOT_FOUND).build();
 
-        alertRepository.persist(alert);
-        System.out.println("PERSISTED");
         List<String> usersIPs =  new ArrayList<>();
         for(User user: domain.getUsers())
             usersIPs.add(user.getIp());
+
+        if(alert.getImageBytes().length == 0)
+            return Response.ok(usersIPs).build();
+
+        BufferedImage buf = ImageSerializer.deserializeImage(alert.getImageBytes());
+        ImageSerializer.saveAsPNG(buf, "alert.png");
+        System.out.println(alert.getTimestamp());
+        alertRepository.persist(alert);
+        System.out.println("PERSISTED");
+
 
         return Response.ok(usersIPs).build();
     }
