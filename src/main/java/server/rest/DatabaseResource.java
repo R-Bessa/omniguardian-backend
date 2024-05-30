@@ -19,6 +19,7 @@ import java.util.List;
 @ApplicationScoped
 @Transactional
 public class DatabaseResource implements DatabaseService {
+    private static final int ALERTS_LIMIT = 10;
 
     @Inject
     UserRepository userRepository;
@@ -93,6 +94,10 @@ public class DatabaseResource implements DatabaseService {
         BufferedImage buf = ImageSerializer.deserializeImage(alert.getImageBytes());
         ImageSerializer.saveAsPNG(buf, "alert.png");
         System.out.println(alert.getTimestamp());
+        if(alertRepository.count() + 1 > ALERTS_LIMIT) {
+            Alert olderAlert = alertRepository.streamAll().findFirst().get();
+            alertRepository.delete(olderAlert);
+        }
         alertRepository.persist(alert);
         System.out.println("PERSISTED");
 
